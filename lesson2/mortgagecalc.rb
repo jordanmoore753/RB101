@@ -31,12 +31,14 @@ loop do
   begin_msg("Hi there, #{name}.")
   begin_msg('Before we calculate, I need some information from you.')
   begin_msg('Please give me your loan duration in years: ')
+  begin_msg('You may use decimals: half a year => 0.5 ')
   loan_duration = ''
 
   loop do
     loan_duration = gets.chomp
     break if valid_num?(loan_duration)
-    begin_msg('Please give me the loan duration in years: ')
+    begin_msg('Error: please give me the loan duration in years.')
+    begin_msg('You may use decimals: half a year => 0.5 ')
   end
 
   begin_msg("Thank you, #{name}.")
@@ -47,7 +49,7 @@ loop do
   loop do
     apr = gets.chomp
     break if valid_num?(apr)
-    begin_msg('Please give me the APR. This will be a number, like 3.5 or 4: ')
+    begin_msg('Error: please give me the APR. Examples: 3.5, 4: ')
   end
 
   begin_msg("Almost there, #{name}.")
@@ -57,7 +59,7 @@ loop do
   loop do
     total_loan_amount = gets.chomp
     break if valid_num?(total_loan_amount)
-    begin_msg('Please give me the total amount of your loan.')
+    begin_msg('Error: please give me the total amount of your loan.')
   end
 
   begin_msg('Calculating Monthly Interest Rate and Converting...')
