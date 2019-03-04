@@ -64,12 +64,14 @@ loop do
 
   begin_msg('Calculating Monthly Interest Rate and Converting...')
 
-  l_d_m = loan_duration.to_f * 12
-  m_i_r = ((apr.to_f / loan_duration.to_f) / 100.0)
-  t_l_a = total_loan_amount.to_f
+  loan_duration_months = loan_duration.to_f * 12
+  monthly_interest_rate = ((apr.to_f / 100.0) / 12.0)
+  total_loan_amount = total_loan_amount.to_f
 
   begin_msg('Calculating Monthly Payment...')
-  monthly_payment = t_l_a * (m_i_r / (1 - (1 + m_i_r)**-l_d_m))
+  monthly_payment = total_loan_amount * 
+                                  (monthly_interest_rate / 
+                                    (1 - (1 + monthly_interest_rate)**-loan_duration_months));
   monthly_payment = monthly_payment.round(2)
   begin_msg("Your monthly payment will be: $#{monthly_payment}.")
   begin_msg('Would you like to run this calculator again? Y if YES: ')
