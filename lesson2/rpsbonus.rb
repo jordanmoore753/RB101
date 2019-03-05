@@ -24,11 +24,29 @@ def ending_prompt(words)
   puts "*^^^^^* #{words} *^^^^^*"
 end
 
-def check_game_result(player, computer)
+def player_won?(player, computer)
   if WIN_OPTIONS[player].include?(computer)
-    "Player wins with #{player}."
-  elsif WIN_OPTIONS[computer].include?(player)
-    "Computer wins with #{computer}."
+    true
+  else
+    false
+  end
+end
+
+def computer_won?(player, computer)
+  if WIN_OPTIONS[computer].include?(player)
+    true
+  else
+    false
+  end
+end
+
+def display_game_result(player, computer)
+  if player_won?(player, computer)
+    prompt("Player wins with #{player}.")
+    computer_won?(player, computer) == false
+  elsif computer_won?(player, computer)
+    prompt("Computer wins with #{computer}.")
+    player_won?(player, computer) == false
   else
     'Tie.'
   end
@@ -48,6 +66,14 @@ def end_game(pwintotal, cwintotal)
   pwintotal == WIN_TOTAL || cwintotal == WIN_TOTAL
 end
 
+def player_won_match?(playertotal)
+  true if playertotal == 5
+end
+
+def computer_won_match?(computertotal)
+  true if computertotal == 5
+end
+
 prompt('Welcome. Please input your name: ')
 name = ''
 
@@ -61,11 +87,12 @@ loop do
   prompt("Welcome, #{name}. This is a multi-round game of RPSLS.")
   prompt('Whoever reaches 5 first wins the game.')
 
-  display_result = ''
   player_win_total = 0
   comp_win_total = 0
 
-  until player_win_total == WIN_TOTAL || comp_win_total == WIN_TOTAL
+  until player_won_match?(player_win_total) ||
+        computer_won_match?(comp_win_total)
+
     player_choice = ''
     loop do
       prompt("Choose one: #{valid_choices.join(', ')}")
@@ -81,11 +108,11 @@ loop do
     computer_choice = lengthen_choice(computer_choice)
 
     prompt("#{player_choice} vs. #{computer_choice}.")
-    display_result = check_game_result(player_choice, computer_choice)
-    prompt(display_result.to_s)
-    if display_result == "Player wins with #{player_choice}."
+    display_game_result(player_choice, computer_choice)
+
+    if player_won?(player_choice, computer_choice)
       player_win_total += 1
-    elsif display_result == "Computer wins with #{computer_choice}."
+    elsif computer_won?(player_choice, computer_choice)
       comp_win_total += 1
     end
 
@@ -98,9 +125,9 @@ loop do
 
   end
 
-  if player_win_total == WIN_TOTAL
+  if player_won_match?(player_win_total)
     ending_prompt('Player wins the game.')
-  elsif comp_win_total == WIN_TOTAL
+  elsif computer_won_match?(comp_win_total)
     ending_prompt('Computer wins the game.')
   end
   break
