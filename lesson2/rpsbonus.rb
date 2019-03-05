@@ -25,19 +25,11 @@ def ending_prompt(words)
 end
 
 def player_won?(player, computer)
-  if WIN_OPTIONS[player].include?(computer)
-    true
-  else
-    false
-  end
+  WIN_OPTIONS[player].include?(computer)
 end
 
 def computer_won?(player, computer)
-  if WIN_OPTIONS[computer].include?(player)
-    true
-  else
-    false
-  end
+  WIN_OPTIONS[computer].include?(player)
 end
 
 def display_game_result(player, computer)
@@ -67,11 +59,11 @@ def end_game(pwintotal, cwintotal)
 end
 
 def player_won_match?(playertotal)
-  true if playertotal == 5
+  playertotal == 5 
 end
 
 def computer_won_match?(computertotal)
-  true if computertotal == 5
+  computertotal == 5 
 end
 
 prompt('Welcome. Please input your name: ')
