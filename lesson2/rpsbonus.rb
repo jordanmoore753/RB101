@@ -21,13 +21,21 @@ def prompt_error(error)
   puts "!!! #{error} !!!"
 end
 
+def add_win_player
+  @player_win_total += 1
+end
+
+def add_win_computer
+  @comp_win_total += 1
+end
+
 def check_display_game_result(player, computer)
   if WIN_OPTIONS[player].include?(computer)
     prompt('Player wins.')
-    @player_win_total += 1
+    add_win_player
   elsif WIN_OPTIONS[computer].include?(player)
     prompt('Computer wins.')
-    @comp_win_total += 1
+    add_win_computer
   else
     prompt('Tie.')
   end
