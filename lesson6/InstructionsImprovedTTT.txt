@@ -1,0 +1,50 @@
+1. Improved  - Done, had to look at solution.
+
+- the last number in the available squares should
+be joined to the list by an 'or', 'and', or '; and(or)'.
+- write a method called joinor() to accomplish this.
+- examples: joinor([1, 2])                   # => "1 or 2"
+            joinor([1, 2, 3])                # => "1, 2, or 3"
+            joinor([1, 2, 3], '; ')          # => "1; 2; or 3"
+            joinor([1, 2, 3], ', ', 'and')   # => "1, 2, and 3"
+
+- Default is 'or'; anything else is done by appending.
+- Maybe by appending to the array[-1] index value of the array within the method?
+
+2. Keep Score - Done, no look at solution. 
+
+- keep score of each time the player/computer wins. 
+- No global or constant variables. 
+- First to five wins.
+
+3. Computer AI - Defense - DONE! No solution. Took me 7 hours total.
+
+- We don't want the computer to be picking randomly.
+- Let's make it intelligent. 
+- If there's an immediate threat, like two squares marked by the opponent, then
+- the computer should mark the third square to prevent a win.
+- If there's no immediate threat, pick a random square.
+
+4. Computer Attack AI - DONE! Took about 10 minutes.
+
+- Computer should look for two squares of his own and place to win.
+
+5. Computer Turn Refinements - Done - took a couple hours
+
+- Computer should attack over defend when given a choice - DONE
+- Computer should pick #5 if possible, then attack, then defend. - DONE
+- Player should choose (or flip a coin) to see who goes first. - DONE
+  ...this can be done by having a choice loop at the top of the
+  ...program that lets you choose. Inside the loop, it the player
+  ...chooses 'Comp' then the loop executes the first computer
+  ...play, and then breaks out of the loop. Then, the normal loop
+  ...goes as it would've without the first loop, just with one piece
+  ...on the board already (the computer's).
+
+6. Improve the game loop - Done - took a couple hours
+
+- Remove redundant code in the main game loop.
+- Create a method that alternates between computer and player turns.
+- To me, this sounds like a variable that needs to be added to each turn.
+- Maybe if the two variables are equal, it's the computer turn.
+- If it's one greater, then it's player's turn.
