@@ -6,9 +6,8 @@ WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
                 [[1, 5, 9], [3, 5, 7]]
 
-current_player = [1]
-usr_score = [0] # I use arrays for adding numbers inside of method
-comp_score = [0] # because of local variable scope inside methods
+current_player = 'player'
+scores = { 'player' => 0, 'computer' => 0 }
 choice_option = CHOICE[2]
 
 def prompt(message)
@@ -47,12 +46,14 @@ def player_places_piece!(brd)
   square = ''
   loop do
     prompt "Choose a square: #{joinor(empty_squares(brd))}."
-    square = gets.chomp.to_i
-    break if empty_squares(brd).include?(square)
+    square = gets.chomp
+    break if empty_squares(brd).include?(square.to_i) &&
+             square == square.to_i.to_s
 
     prompt 'Choose a valid square.'
   end
 
+  square = square.to_i
   brd[square] = 'X'
 end
 
@@ -73,8 +74,8 @@ def someone_won?(brd)
   !!detect_winner(brd)
 end
 
-def display_score(player, computer)
-  prompt("Player: #{player[0]}. Computer: #{computer[0]}")
+def display_score(score)
+  prompt("Player: #{score['player']}. Computer: #{score['computer']}")
 end
 
 def detect_winner(brd)
@@ -88,8 +89,8 @@ def detect_winner(brd)
   nil
 end
 
-def end_game(player, computer)
-  player[0] >= 5 || computer[0] >= 5
+def end_game(hsh)
+  hsh['player'] >= 5 || hsh['computer'] >= 5
 end
 
 def joinor(arr, punctuation=', ', word='or')
@@ -109,19 +110,19 @@ def create_square(arr)
 end
 
 def find_at_risk_square(brd)
-  new_array = 
+  new_array =
     WINNING_LINES.map do |line|
       if brd.values_at(*line).count(COMPUTER_MARKER) == 2
         line.select do |key|
           if brd[key] != COMPUTER_MARKER &&
-                      empty_squares(brd).include?(key)
+             empty_squares(brd).include?(key)
             brd[key]
           end
         end
       elsif brd.values_at(*line).count(PLAYER_MARKER) == 2
         line.select do |key|
           if brd[key] != PLAYER_MARKER &&
-                      empty_squares(brd).include?(key)
+             empty_squares(brd).include?(key)
             brd[key]
           end
         end
@@ -135,22 +136,34 @@ end
 
 # rubocop:enable Metrics/AbcSize
 
-def place_piece!(brd, current_play, user, comp)
-  if current_play[0].odd? # odd means player turn
+def place_piece!(brd, current_play, score)
+  if current_play == 'player'
     player_places_piece!(brd)
-    user[0] += 1 if someone_won?(brd)
-  elsif current_play[0].even? # even means computer turn
+    user_add_win(score) if someone_won?(brd)
+
+  else
     computer_places_piece!(brd)
-    comp[0] += 1 if someone_won?(brd)
+    comp_add_win(score) if someone_won?(brd)
+
   end
 end
 
-def alternate_player(current_play)
-  current_play[0] += 1 # one turn means + 1
+def user_add_win(hsh)
+  hsh['player'] += 1
 end
 
-def reset_player(current_play)
-  current_play[0] = 1
+def comp_add_win(hsh)
+  hsh['computer'] += 1
+end
+
+def alternate_player(current_play)
+  return 'computer' if current_play == 'player'
+
+  'player'
+end
+
+def reset_player(_current_play)
+  'player'
 end
 
 loop do
@@ -158,11 +171,19 @@ loop do
   display_board(board)
 
   if choice_option == CHOICE[2]
-    prompt('Would you like to move first? Y for yes:')
-    ans = gets.chomp.downcase
+    prompt('Would you like to move first? Y for yes, N for no:')
 
-    if ans != 'y'
-      computer_places_piece!(board)
+    loop do
+      ans = gets.chomp.downcase
+
+      if ans == 'n'
+        computer_places_piece!(board)
+        break
+      elsif ans == 'y'
+        break
+      else
+        prompt('Please input Y or N.')
+      end
     end
   elsif choice_option == CHOICE[1]
     computer_places_piece!(board)
@@ -170,14 +191,14 @@ loop do
 
   loop do
     display_board(board)
-    place_piece!(board, current_player, usr_score, comp_score)
-    alternate_player(current_player)
+    place_piece!(board, current_player, scores)
+    current_player = alternate_player(current_player)
     break if someone_won?(board) || board_full?(board)
   end
 
   system 'clear'
   display_board(board)
-  display_score(usr_score, comp_score)
+  display_score(scores)
 
   if someone_won?(board)
     prompt "#{detect_winner(board)} won!"
@@ -185,12 +206,26 @@ loop do
     prompt 'Tie!'
   end
 
-  break if end_game(usr_score, comp_score)
+  break if end_game(scores)
 
-  reset_player(current_player)
-  prompt 'Play again? (y or n)'
-  answer = gets.chomp.downcase
-  break unless answer.start_with?('y')
+  current_player = reset_player(current_player)
+  prompt "Play again? 'Y' to continue, 'N' to stop."
+  answer = ''
+
+  loop do
+    answer = gets.chomp.downcase
+    if answer == 'y'
+      break
+    elsif answer == 'n'
+      break
+    else
+      prompt("Please input 'Y' or 'N'.")
+    end
+  end
+
+  next if answer == 'y'
+
+  break
 end
 
 prompt 'Thank you for playing.'
