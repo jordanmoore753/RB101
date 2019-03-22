@@ -136,15 +136,20 @@ end
 
 # rubocop:enable Metrics/AbcSize
 
-def place_piece!(brd, current_play, score)
+def place_piece!(brd, current_play)
   if current_play == 'player'
     player_places_piece!(brd)
-    user_add_win(score) if someone_won?(brd)
-
   else
     computer_places_piece!(brd)
-    comp_add_win(score) if someone_won?(brd)
+  end
+end
 
+def who_won?(brd, current_play, hsh)
+  if someone_won?(brd)
+    case current_play
+    when 'player' then user_add_win(hsh)
+    when 'computer' then comp_add_win(hsh)
+    end
   end
 end
 
@@ -191,7 +196,8 @@ loop do
 
   loop do
     display_board(board)
-    place_piece!(board, current_player, scores)
+    place_piece!(board, current_player)
+    who_won?(board, current_player, scores)
     current_player = alternate_player(current_player)
     break if someone_won?(board) || board_full?(board)
   end
