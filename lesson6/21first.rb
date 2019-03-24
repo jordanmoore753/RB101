@@ -14,8 +14,8 @@ deck_of_cards = { '2' => { quantity: 4, value: 2 },
 
 WINNING_SCORE = 21
 current_player = 'player'
-play_value = 0
-deal_value = 0
+player_hand_value = 0
+dealer_hand_value = 0
 player_cards = []
 dealer_cards = []
 scores = { 'player' => 0, 'dealer' => 0 }
@@ -30,7 +30,7 @@ def display_dealer(de_card, pl_card)
   puts '-----------------'
   puts '  (-_-)  Dealer'
   puts '-----------------'
-  puts " |#{de_card}| |?| "
+  puts " |#{de_card.first}| |?| "
   puts '-----------------'
   puts "Player cards: #{pl_card}"
   puts '------------------------'
@@ -61,12 +61,17 @@ end
 def hit(deck, pl_card, de_card, curr_player)
   shuffled_deck_hash = {}
   available_cards = []
+
   deck.map do |key, _|
     if deck[key][:quantity] >= 1
       shuffled_deck_hash[key] = deck[key][:quantity]
     end
   end
-  shuffled_deck_hash.map { |key, value| value.times { available_cards << key } }
+  shuffled_deck_hash.map do |key, value|
+    value.times do
+      available_cards << key
+    end
+  end
   if curr_player == 'player'
     pl_card << available_cards.sample
   else
@@ -76,20 +81,24 @@ end
 
 def get_hand_total_value(deck, curr_hand)
   total_of_cards = []
+  ace_index = []
   curr_hand.each do |card|
     total_of_cards << deck[card][:value]
   end
-  calculate_aces(curr_hand, total_of_cards)
+  calculate_aces(deck, curr_hand, total_of_cards)
 end
 
-def calculate_aces(curr_hand, total)
+def calculate_aces(deck, curr_hand, total)
   ace_index = []
   if curr_hand.include?('Ace') && total.flatten.reduce(:+) > 21
-    total.each_with_index { |val, idx| ace_index << idx if val == 11 }
+    total.each_with_index do |val, idx|
+      ace_index << idx if val == 11
+    end
     if ace_index.size == 1 && total.size >= 3
       total[ace_index.first] = 1
     elsif ace_index.size >= 2 && total.size >= 3
-      total[ace_index.first, 2] = 1
+      total[ace_index.first] = 1
+      total[ace_index[1]] = 1
     end
   end
   total.flatten.reduce(:+)
@@ -108,15 +117,15 @@ def dealer_check_value(de_card)
 end
 
 def check_for_win(curr_hand)
-  WINNING_SCORE - curr_hand
+  WINNING_SCORE - curr_hand 
 end
 
 def who_won?(final_pl, final_de)
   if final_pl == final_de
     prompt('Tie.')
-  elsif final_pl < final_de
+  elsif final_pl < final_de 
     prompt('Player won.')
-  elsif final_pl.zero? && de_card != 0
+  elsif final_pl == 0 && final_de != 0
     prompt('Player won.')
   else
     prompt('Computer won. ')
@@ -124,12 +133,12 @@ def who_won?(final_pl, final_de)
   prompt("Player's hand value: #{final_pl}, Computer's hand value: #{final_de}")
 end
 
-def give_point(pl_card, de_card, hsh)
+def give_point(pl_card, de_card, hsh) # FIGURE OUT THE POINTS HERE - IT'S GOING BY LOWEST INCLUDING NEGATIVE NUMBERS
   if pl_card == de_card
 
-  elsif pl_card < de_card
+  elsif pl_card < de_card 
     hsh['player'] += 1
-  elsif pl_card.zero? && de_card != 0
+  elsif pl_card == 0 && de_card != 0
     hsh['player'] += 1
   else
     hsh['dealer'] += 1
@@ -150,7 +159,7 @@ def display_score(hsh)
 end
 
 def reset_deck_quantity(deck)
-  deck.map do |key, _|
+  deck.map do |key, value|
     deck[key][:quantity] = 4
   end
 end
@@ -173,11 +182,11 @@ loop do # main game loop
   choice = ''
 
   loop do # player
-    puts 'Options: Hit - Stay     '
-    puts '------------------------'
-    prompt('Which option do you choose?') 
+    puts "Options: Hit - Stay     "
+    puts "------------------------"
+    prompt("Which option do you choose?") 
     choice = gets.chomp.to_s.downcase
-
+    
     if choice == 'hit'
       hit(deck_of_cards, player_cards, dealer_cards, current_player)
       update_card_quantity_during_match(deck_of_cards, player_cards)
@@ -192,12 +201,12 @@ loop do # main game loop
       break
     end
   end
-
+    
   if get_hand_total_value(deck_of_cards, player_cards) > WINNING_SCORE
-
+    
   else
-    current_player = alternate_player
-    loop do 
+    current_player = alternate_player # switch from player to dealer
+    loop do # dealer
       if get_hand_total_value(deck_of_cards, dealer_cards) >= 17
         prompt('Dealer stays.')
         break
@@ -218,14 +227,14 @@ loop do # main game loop
 
   new_play_hand = get_hand_total_value(deck_of_cards, player_cards)
   new_deal_hand = get_hand_total_value(deck_of_cards, dealer_cards)
-  play_value = check_for_win(new_play_hand)
-  deal_value = check_for_win(new_deal_hand)
+  player_hand_value = check_for_win(get_hand_total_value(deck_of_cards, player_cards))
+  dealer_hand_value = check_for_win(get_hand_total_value(deck_of_cards, dealer_cards))
   
   if new_deal_hand > WINNING_SCORE || new_play_hand > WINNING_SCORE
-    give_point_bust(play_value, deal_value, scores)
+    give_point_bust(player_hand_value, dealer_hand_value, scores)
   else
-    who_won?(play_value, deal_value)
-    give_point(play_value, deal_value, scores)
+    who_won?(player_hand_value, dealer_hand_value)
+    give_point(player_hand_value, dealer_hand_value, scores)
   end
   display_score(scores)
   current_player = reset_player
