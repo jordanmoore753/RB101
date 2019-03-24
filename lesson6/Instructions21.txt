@@ -1,0 +1,37 @@
+1. Make deck hash - Done
+2. Make Hit method - DONE
+3. Make Stay - DONE
+4. Make Deal method - DONE
+5. Make Check-value of hand method - DONE
+6. Make Check-bust - DONE
+7. Make Check-win method
+8. Make Ace equal to both 1 and 11
+
+8. Computer AI
+  - stay at hand_value >= 17
+  - bust at hand_value > 21
+
+9. Main Game Loop
+  1. Ask for name
+  2. Deal 2 cards to each player
+  - one dealer card (lower of two) is visible to player, none to dealer
+  3. Player's choice first
+  4. Hit (Loop) or Stay
+  - if bust, dealer wins automatically
+  5. Dealer's choice
+  6. Hit (Loop) or Stay
+  - if bust, player wins automatically
+  7. Compare hands, closer to 21 wins
+  - add win
+  8. Play again?
+  9. @goto 2
+
+    puts ""
+  puts "THE HAPPY CA$INO"
+  puts "-----------------"
+  puts "  (-_-)  Dealer"
+  puts "-----------------"
+  puts " |#{de_card.min}| |?| "
+  puts "-----------------"
+  puts "Player cards: #{pl_card}"
+  puts "------------------------"
