@@ -30,7 +30,7 @@ def display_dealer(de_card, pl_card)
   puts '-----------------'
   puts '  (-_-)  Dealer'
   puts '-----------------'
-  puts " |#{de_card}| |?| "
+  puts " |#{de_card.first}| |?| "
   puts '-----------------'
   puts "Player cards: #{pl_card}"
   puts '------------------------'
@@ -114,14 +114,18 @@ end
 def who_won?(final_pl, final_de)
   if final_pl == final_de
     prompt('Tie.')
+  elsif final_pl < 0
+    prompt('Player busts.')
+  elsif final_de < 0
+    prompt('Dealer busts.')
   elsif final_pl < final_de
     prompt('Player won.')
   elsif final_pl.zero? && de_card != 0
     prompt('Player won.')
   else
-    prompt('Computer won. ')
+    prompt('Dealer won. ')
   end
-  prompt("Player's hand value: #{final_pl}, Computer's hand value: #{final_de}")
+  prompt("Player's hand value: #{final_pl}, Dealer's hand value: #{final_de}")
 end
 
 def give_point(pl_card, de_card, hsh)
@@ -136,17 +140,16 @@ def give_point(pl_card, de_card, hsh)
   end
 end
 
-def give_point_bust(pl_card, de_card, hsh)
+def give_point_bust(pl_card, hsh)
   if pl_card < 0
     hsh['dealer'] += 1
   else
     hsh['player'] += 1
   end
-  prompt("Player's hand value: #{pl_card}, Computer's hand value: #{de_card}")
 end
 
 def display_score(hsh)
-  prompt("Player: #{hsh['player']}. Computer: #{hsh['dealer']}.")
+  prompt("Player: #{hsh['player']}. Dealer: #{hsh['dealer']}.")
 end
 
 def reset_deck_quantity(deck)
@@ -175,7 +178,7 @@ loop do # main game loop
   loop do # player
     puts 'Options: Hit - Stay     '
     puts '------------------------'
-    prompt('Which option do you choose?') 
+    prompt('Which option do you choose?')
     choice = gets.chomp.to_s.downcase
 
     if choice == 'hit'
@@ -197,7 +200,7 @@ loop do # main game loop
 
   else
     current_player = alternate_player
-    loop do 
+    loop do
       if get_hand_total_value(deck_of_cards, dealer_cards) >= 17
         prompt('Dealer stays.')
         break
@@ -210,23 +213,23 @@ loop do # main game loop
       if get_hand_total_value(deck_of_cards, dealer_cards) > WINNING_SCORE
         prompt('Dealer busts.')
         break
-      else
-        system 'clear'
       end
     end
   end
 
+  system 'clear'
+  display_dealer(dealer_cards, player_cards)
   new_play_hand = get_hand_total_value(deck_of_cards, player_cards)
   new_deal_hand = get_hand_total_value(deck_of_cards, dealer_cards)
   play_value = check_for_win(new_play_hand)
   deal_value = check_for_win(new_deal_hand)
-  
   if new_deal_hand > WINNING_SCORE || new_play_hand > WINNING_SCORE
-    give_point_bust(play_value, deal_value, scores)
+    give_point_bust(play_value, scores)
   else
-    who_won?(play_value, deal_value)
     give_point(play_value, deal_value, scores)
   end
+
+  who_won?(play_value, deal_value)
   display_score(scores)
   current_player = reset_player
   reset_hands(player_cards, dealer_cards)
@@ -251,7 +254,8 @@ loop do # main game loop
     end
   end
 
-  break if answer == 'n'
-
   system 'clear'
+  if answer == 'n'
+    break
+  end
 end
