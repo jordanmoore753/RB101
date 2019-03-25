@@ -24,6 +24,15 @@ def prompt(message)
   puts "=> #{message}"
 end
 
+def rules
+  prompt("Welcome to #{WINNING_SCORE}.")
+  prompt('Draw one card by typing: Hit.')
+  prompt('End your turn by typing: Stay')
+  prompt("Get your hand's total equal to or close to #{WINNING_SCORE}.")
+  prompt('If you go over, you lose.')
+  prompt('Ace: 1 or 11; Royals: 10, 2-10: Face Value.')
+end
+
 def display_dealer(de_card, pl_card)
   puts ''
   puts 'THE HAPPY CA$INO'
@@ -58,7 +67,7 @@ def update_card_quantity_during_match(deck, curr_hand)
   deck[last_card][:quantity] -= 1
 end
 
-def hit(deck, pl_card, de_card, curr_player)
+def shuffle(deck)
   shuffled_deck_hash = {}
   available_cards = []
   deck.map do |key, _|
@@ -67,10 +76,15 @@ def hit(deck, pl_card, de_card, curr_player)
     end
   end
   shuffled_deck_hash.map { |key, value| value.times { available_cards << key } }
+  available_cards
+end
+
+def hit(deck, pl_card, de_card, curr_player)
+  avail_card = shuffle(deck)
   if curr_player == 'player'
-    pl_card << available_cards.sample
+    pl_card << avail_card.sample
   else
-    de_card << available_cards.sample
+    de_card << avail_card.sample
   end
 end
 
@@ -83,13 +97,11 @@ def get_hand_total_value(deck, curr_hand)
 end
 
 def calculate_aces(curr_hand, total)
-  ace_index = []
-  if curr_hand.include?('Ace') && total.flatten.reduce(:+) > 21
-    total.each_with_index { |val, idx| ace_index << idx if val == 11 }
-    if ace_index.size == 1 && total.size >= 3
-      total[ace_index.first] = 1
-    elsif ace_index.size >= 2 && total.size >= 3
-      total[ace_index.first, 2] = 1
+  if curr_hand.include?('Ace') && total.flatten.reduce(:+) > WINNING_SCORE
+    total = total.map do |num|
+      num = 1 if num == 11
+
+      num
     end
   end
   total.flatten.reduce(:+)
@@ -114,16 +126,19 @@ end
 def who_won?(final_pl, final_de)
   if final_pl == final_de
     prompt('Tie.')
-  elsif final_pl < 0
-    prompt('Player busts.')
-  elsif final_de < 0
-    prompt('Dealer busts.')
   elsif final_pl < final_de
-    prompt('Player won.')
-  elsif final_pl.zero? && de_card != 0
     prompt('Player won.')
   else
     prompt('Dealer won. ')
+  end
+  prompt("Player's hand value: #{final_pl}, Dealer's hand value: #{final_de}")
+end
+
+def who_won_bust?(final_pl, final_de)
+  if final_pl < 0
+    prompt('Player busts.')
+  else
+    prompt('Dealer busts.')
   end
   prompt("Player's hand value: #{final_pl}, Dealer's hand value: #{final_de}")
 end
@@ -168,6 +183,8 @@ end
 def end_game(hsh)
   hsh['player'] >= 5 || hsh['dealer'] >= 5
 end
+
+rules
 
 loop do # main game loop
   deal_initial_cards(deck_of_cards, player_cards, dealer_cards)
@@ -218,6 +235,7 @@ loop do # main game loop
   end
 
   system 'clear'
+
   display_dealer(dealer_cards, player_cards)
   new_play_hand = get_hand_total_value(deck_of_cards, player_cards)
   new_deal_hand = get_hand_total_value(deck_of_cards, dealer_cards)
@@ -225,11 +243,12 @@ loop do # main game loop
   deal_value = check_for_win(new_deal_hand)
   if new_deal_hand > WINNING_SCORE || new_play_hand > WINNING_SCORE
     give_point_bust(play_value, scores)
+    who_won_bust?(play_value, deal_value)
   else
     give_point(play_value, deal_value, scores)
+    who_won?(play_value, deal_value)
   end
 
-  who_won?(play_value, deal_value)
   display_score(scores)
   current_player = reset_player
   reset_hands(player_cards, dealer_cards)
@@ -243,19 +262,19 @@ loop do # main game loop
   prompt "Play again? 'Y' to continue, 'N' to stop."
   answer = ''
 
+  # rubocop:disable Style/MultipleComparison
   loop do
     answer = gets.chomp.downcase
-    if answer == 'y'
-      break
-    elsif answer == 'n'
-      break
-    else
-      prompt("Please input 'Y' or 'N'.")
-    end
-  end
+    break if answer == 'y' || answer == 'n'
 
-  system 'clear'
+    prompt("Please input 'Y' or 'N'.")
+  end
+  # rubocop:enable Style/MultipleComparison
+
   if answer == 'n'
+    prompt('Thank you for playing.')
     break
+  else
+    system 'clear'
   end
 end
