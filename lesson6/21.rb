@@ -27,7 +27,7 @@ end
 def rules
   prompt("Welcome to #{WINNING_SCORE}.")
   prompt('Draw one card by typing: Hit.')
-  prompt('End your turn by typing: Stay')
+  prompt('End your turn by typing: Stay.')
   prompt("Get your hand's total equal to or close to #{WINNING_SCORE}.")
   prompt('If you go over, you lose.')
   prompt('Ace: 1 or 11; Royals: 10, 2-10: Face Value.')
