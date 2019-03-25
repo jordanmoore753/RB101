@@ -184,6 +184,14 @@ def end_game(hsh)
   hsh['player'] >= 5 || hsh['dealer'] >= 5
 end
 
+def display_game_winner(hsh)
+  if hsh['player'] >= 5
+    prompt('Player wins the game.')
+  else
+    prompt('Dealer wins the game.')
+  end
+end
+
 rules
 
 loop do # main game loop
@@ -255,6 +263,7 @@ loop do # main game loop
   reset_deck_quantity(deck_of_cards)
 
   if end_game(scores)
+    display_game_winner(scores)
     prompt('Thank you for playing.')
     break
   end
