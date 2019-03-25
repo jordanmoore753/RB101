@@ -13,12 +13,15 @@ deck_of_cards = { '2' => { quantity: 4, value: 2 },
                   'Ace' => { quantity: 4, value: 11 } }
 
 WINNING_SCORE = 21
+WIN_MATCH_SCORE = 5
 current_player = 'player'
-play_value = 0
-deal_value = 0
 player_cards = []
 dealer_cards = []
 scores = { 'player' => 0, 'dealer' => 0 }
+
+def blank_line
+  puts '------------------------'
+end
 
 def prompt(message)
   puts "=> #{message}"
@@ -31,10 +34,10 @@ def rules
   prompt("Get your hand's total equal to or close to #{WINNING_SCORE}.")
   prompt('If you go over, you lose.')
   prompt('Ace: 1 or 11; Royals: 10, 2-10: Face Value.')
+  prompt("'First player to #{WIN_MATCH_SCORE} wins.")
 end
 
 def display_dealer(de_card, pl_card)
-  puts ''
   puts 'THE HAPPY CA$INO'
   puts '-----------------'
   puts '  (-_-)  Dealer'
@@ -43,6 +46,7 @@ def display_dealer(de_card, pl_card)
   puts '-----------------'
   puts "Player cards: #{pl_card}"
   puts '------------------------'
+  puts 'Options: Hit - Stay     '
 end
 
 def deal_initial_cards(deck, pl_card, de_card)
@@ -81,11 +85,19 @@ end
 
 def hit(deck, pl_card, de_card, curr_player)
   avail_card = shuffle(deck)
-  if curr_player == 'player'
+  if player_turn?(curr_player)
     pl_card << avail_card.sample
   else
     de_card << avail_card.sample
   end
+end
+
+def player_turn?(curr_player)
+  curr_player == 'player'
+end
+
+def dealer_turn?(curr_player)
+  curr_player == 'dealer'
 end
 
 def get_hand_total_value(deck, curr_hand)
@@ -107,58 +119,61 @@ def calculate_aces(curr_hand, total)
   total.flatten.reduce(:+)
 end
 
-def alternate_player
-  'dealer'
+def alternate_player(curr_player)
+  if player_turn?(curr_player)
+    'dealer'
+  else
+    'player'
+  end
 end
 
 def reset_player
   'player'
 end
 
-def dealer_check_value(de_card)
-  de_card < 17
-end
-
 def check_for_win(curr_hand)
   WINNING_SCORE - curr_hand
 end
 
-def who_won?(final_pl, final_de)
-  if final_pl == final_de
-    prompt('Tie.')
-  elsif final_pl < final_de
+def display_who_won(final_pl, final_de)
+  if player_won?(final_pl, final_de)
     prompt('Player won.')
+  elsif dealer_won?(final_pl, final_de)
+    prompt('Dealer won.')
   else
-    prompt('Dealer won. ')
+    prompt('Tie.')
   end
-  prompt("Player's hand value: #{final_pl}, Dealer's hand value: #{final_de}")
+  prompt("Player hand total: #{final_pl}. Dealer hand total: #{final_de}.")
 end
 
-def who_won_bust?(final_pl, final_de)
-  if final_pl < 0
-    prompt('Player busts.')
-  else
-    prompt('Dealer busts.')
+def player_won?(final_pl, final_de)
+  if final_de > WINNING_SCORE
+    true
+  elsif final_pl == final_de
+    false
+  elsif final_pl == WINNING_SCORE
+    true
+  elsif final_pl > final_de && final_pl <= WINNING_SCORE
+    true
   end
-  prompt("Player's hand value: #{final_pl}, Dealer's hand value: #{final_de}")
 end
 
-def give_point(pl_card, de_card, hsh)
-  if pl_card == de_card
+def dealer_won?(final_pl, final_de)
+  if final_pl > WINNING_SCORE
+    true
+  elsif final_pl == final_de
+    false
+  elsif final_de == WINNING_SCORE
+    true
+  elsif final_de > final_pl && final_de <= WINNING_SCORE
+    true
+  end
+end
 
-  elsif pl_card < de_card
-    hsh['player'] += 1
-  elsif pl_card.zero? && de_card != 0
-    hsh['player'] += 1
-  else
+def give_point_win(final_pl, final_de, hsh)
+  if dealer_won?(final_pl, final_de)
     hsh['dealer'] += 1
-  end
-end
-
-def give_point_bust(pl_card, hsh)
-  if pl_card < 0
-    hsh['dealer'] += 1
-  else
+  elsif player_won?(final_pl, final_de)
     hsh['player'] += 1
   end
 end
@@ -181,50 +196,77 @@ def reset_hands(pl_card, de_card)
 end
 
 def end_game(hsh)
-  hsh['player'] >= 5 || hsh['dealer'] >= 5
+  hsh['player'] >= WIN_MATCH_SCORE || hsh['dealer'] >= WIN_MATCH_SCORE
 end
 
 def display_game_winner(hsh)
-  if hsh['player'] >= 5
+  if player_won_match?(hsh)
     prompt('Player wins the game.')
   else
     prompt('Dealer wins the game.')
   end
 end
 
+def player_won_match?(hsh)
+  hsh['player'] == WIN_MATCH_SCORE
+end
+
+def dealer_won_match?(hsh)
+  hsh['dealer'] == WIN_MATCH_SCORE
+end
+
+def player_hit?(input)
+  input == 'h'
+end
+
+def player_stay?(input)
+  input == 's'
+end
+
+# rubocop:disable Style/MultipleComparison
+def valid_play_again_answer?(input)
+  input == 'y' || input == 'n'
+end
+# rubocop:enable Style/MultipleComparison
+
 rules
 
-loop do # main game loop
+loop do
   deal_initial_cards(deck_of_cards, player_cards, dealer_cards)
   update_card_quantity_at_start(deck_of_cards, player_cards, dealer_cards)
   display_dealer(dealer_cards, player_cards)
   choice = ''
 
-  loop do # player
-    puts 'Options: Hit - Stay     '
-    puts '------------------------'
-    prompt('Which option do you choose?')
-    choice = gets.chomp.to_s.downcase
-
-    if choice == 'hit'
-      hit(deck_of_cards, player_cards, dealer_cards, current_player)
-      update_card_quantity_during_match(deck_of_cards, player_cards)
-      system 'clear'
-      if get_hand_total_value(deck_of_cards, player_cards) > WINNING_SCORE
-        prompt('Player busts.')
+  loop do
+    if get_hand_total_value(deck_of_cards, player_cards) == WINNING_SCORE
+      break
+    else
+      blank_line
+      prompt('Type H for Hit, S for Stay.')
+      blank_line
+      choice = gets.chomp.to_s.downcase
+      if player_hit?(choice)
+        hit(deck_of_cards, player_cards, dealer_cards, current_player)
+        update_card_quantity_during_match(deck_of_cards, player_cards)
+        system 'clear'
+        if get_hand_total_value(deck_of_cards, player_cards) > WINNING_SCORE
+          prompt('Player busts.')
+          break
+        elsif get_hand_total_value(deck_of_cards, player_cards) == WINNING_SCORE
+          break
+        else
+          display_dealer(dealer_cards, player_cards)
+        end
+      elsif player_stay?(choice)
+        current_player = alternate_player(current_player)
         break
       else
-        display_dealer(dealer_cards, player_cards)
+        prompt('Please type a valid input: h or s.')
       end
-    elsif choice == 'stay'
-      break
     end
   end
 
-  if get_hand_total_value(deck_of_cards, player_cards) > WINNING_SCORE
-
-  else
-    current_player = alternate_player
+  if dealer_turn?(current_player)
     loop do
       if get_hand_total_value(deck_of_cards, dealer_cards) >= 17
         prompt('Dealer stays.')
@@ -238,6 +280,8 @@ loop do # main game loop
       if get_hand_total_value(deck_of_cards, dealer_cards) > WINNING_SCORE
         prompt('Dealer busts.')
         break
+      elsif get_hand_total_value(deck_of_cards, player_cards) == WINNING_SCORE
+        break
       end
     end
   end
@@ -247,22 +291,15 @@ loop do # main game loop
   display_dealer(dealer_cards, player_cards)
   new_play_hand = get_hand_total_value(deck_of_cards, player_cards)
   new_deal_hand = get_hand_total_value(deck_of_cards, dealer_cards)
-  play_value = check_for_win(new_play_hand)
-  deal_value = check_for_win(new_deal_hand)
-  if new_deal_hand > WINNING_SCORE || new_play_hand > WINNING_SCORE
-    give_point_bust(play_value, scores)
-    who_won_bust?(play_value, deal_value)
-  else
-    give_point(play_value, deal_value, scores)
-    who_won?(play_value, deal_value)
-  end
+  display_who_won(new_play_hand, new_deal_hand)
+  give_point_win(new_play_hand, new_deal_hand, scores)
 
   display_score(scores)
   current_player = reset_player
   reset_hands(player_cards, dealer_cards)
   reset_deck_quantity(deck_of_cards)
 
-  if end_game(scores)
+  if player_won_match?(scores) || dealer_won_match?(scores)
     display_game_winner(scores)
     prompt('Thank you for playing.')
     break
@@ -271,14 +308,12 @@ loop do # main game loop
   prompt "Play again? 'Y' to continue, 'N' to stop."
   answer = ''
 
-  # rubocop:disable Style/MultipleComparison
   loop do
     answer = gets.chomp.downcase
-    break if answer == 'y' || answer == 'n'
+    break if valid_play_again_answer?(answer)
 
     prompt("Please input 'Y' or 'N'.")
   end
-  # rubocop:enable Style/MultipleComparison
 
   if answer == 'n'
     prompt('Thank you for playing.')
