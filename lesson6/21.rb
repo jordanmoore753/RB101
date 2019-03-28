@@ -223,6 +223,10 @@ def player_stay?(input)
   input == 's'
 end
 
+def display_play_again_message
+  prompt("Play again? 'Y' to continue, 'N' to stop.")
+end
+
 # rubocop:disable Style/MultipleComparison
 def valid_play_again_answer?(input)
   input == 'y' || input == 'n'
@@ -305,7 +309,7 @@ loop do
     break
   end
 
-  prompt "Play again? 'Y' to continue, 'N' to stop."
+  display_play_again_message
   answer = ''
 
   loop do
