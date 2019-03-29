@@ -18,9 +18,9 @@ def substrings(str)
   counter = 1
   (0...str.size).each do |start_index|
     this_sub = str[start_index..-1]
-    result << this_sub
+    result << substrings_at_start(this_sub)
   end
   p result
 end
 
-p substrings_at_start('xyzzy')
+p substrings('xyzzy')
