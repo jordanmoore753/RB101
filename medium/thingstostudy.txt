@@ -1,0 +1,35 @@
+# Definitions of terms used in Launch School RB101/RB109
+
+- **Method invocation** — when we call a method, whether that happens to be an existing method from the Ruby Core API or core Library, or a custom method that we’ve defined ourselves using the def keyword.
+- **Method definition** — when, within our code, we define a Ruby method using the def keyword.
+- **mutating the caller**: when you permanently change the argument you passed into a method.
+- **for loop** — defined without the need for a block or do / done statement
+- **the `.product` method**:  returns an array that is a combination of all elements from all arrays
+- **peer scope**: something at a similar level (syntactically) to another piece of code
+- parameter — is what you call the thing you use when defining a method. It relates to how you get data from outside the method in order to use / reference it *inside* the method.
+- **Expression**: an expression is something that is evaluated. expressions always return a value.
+- **Variable Scope**: variable scope relates to knowing where local variables are accessible within a programme.
+- **.select**: .select returns a new array based on the block’s return value. If it evaluates to true, then the element is selected.
+- **.map**: map returns a new array based on the block’s return value. Each element is transformed based on the return value.
+- **Truthy & Falsey** — Truthy is when a statement / expression evaluates to true. Falsey is when a statement / expression evaluates to false.
+- Local variable
+- Scope (outer & inner)
+- Method side-effects
+- Return value
+- Collection
+- Symbol
+- pointer
+- concatenation
+- reassignment
+- initialisation
+- Variable Shadowing
+- Referencing (an object)
+- break — immediately exits you from a loop & any subsequent code from that loop won’t be executed.
+- argument
+- block
+- next — allows us to skip the current iteration of a loop and start executing the next iteration
+- keyword
+- peer scope — something at a similar level (syntactically) to another piece of code
+- Pass by value — think of this as using COPIES of the value of an object. You can use them, and amend them but the original object is immutable / unchangeable.
+- Pass by reference — think of this as using actual direct calls and references to memory addresses. You can actually change these values.
+- caller / receiver — these are the same thing (here: `[1, 2, 3].each {| x |…}`, the array is the caller / receiver)
