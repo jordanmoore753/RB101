@@ -2,17 +2,52 @@
 
 # output = a boolean
 
-# rules = count the total amount of characters in
-# string, then calc the lowercase, uppercase, and nonword
-# characters.
+# rules = return true boolean if all parantheses
+# in the input string argument are properly balanced
+# false otherwise
 
-# convert the totals into percentages and make them the
-# values of the hash 
+# cannot start with ')'
+# if it doesn't, count total amount of parantheses
+# if equal you're good
 
-# ex =
+# ex = 
+
+# balanced?('What (is) this?') == true
+# balanced?('What is) this?') == false
+# balanced?('What (is this?') == false
+# balanced?('((What) (is this))?') == true
+# balanced?('((What)) (is this))?') == false
+# balanced?('Hey!') == true
+# balanced?(')Hey!(') == false
+# balanced?('What ((is))) up(') == false
+
+def balanced?(str)
+  parantheses = { '(' => 0, ')' => 0 }
+  str.chars.each do |char|
+    if char == ')' && parantheses['('] == 0
+      return false
+    elsif str.chars[-1] == '(' || str.chars[0] == ')'
+      return false
+    elsif char == '('
+      parantheses['('] += 1
+    elsif char == ')'
+      parantheses[')'] += 1
+    end
+  end
+  
+  return true unless parantheses['('] != parantheses[')']
+  false
+end
 
 
-
+p balanced?('What (is) this?') == true
+p balanced?('What is) this?') == false
+p balanced?('What (is this?') == false
+p balanced?('((What) (is this))?') == true
+p balanced?('((What)) (is this))?') == false
+p balanced?('Hey!') == true
+p balanced?(')Hey!(') == false
+p balanced?('What ((is))) up(') == false
 
 
 
