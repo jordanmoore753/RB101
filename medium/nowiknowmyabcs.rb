@@ -42,21 +42,22 @@ def block_word?(str)
              'T' => 'G', 'E' => 'R', 'S' => 'F',
              'W' => 'J', 'U' => 'H', 'I' => 'V', 
              'Y' => 'L', 'M' => 'Z' }
-  counter = 0
 
+  compare_array = []
   str.upcase!
-  str = str.chars
 
-  str.map do |char|
-    p char, blocks.key(char)
-    if char == blocks.key(char)
-      return false
-    end
+  str.chars.each do |char|
+    compare_array << char
+    compare_array << blocks.key(char)
+  end
+  
+  compare_array.each do |value|
+    return false if compare_array.count(value) > 1
   end
   true
 end
 
-p block_word?('BUTCH')
+p block_word?('jest')
 
 
 
