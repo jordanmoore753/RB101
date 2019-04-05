@@ -55,6 +55,23 @@ def bubble_sort!(arr)
   arr
 end
 
+# BEST PRACTICE
+
+def bubble_sort!(array)
+  loop do 
+    swapped = false
+    1.upto(array.size - 1) do |index|
+      next if array[index - 1] <= array[index]
+      array[index - 1], array[index] = array[index], array[index - 1]
+      swapped = true
+    end
+
+    break unless swapped
+  end
+  array
+end
+
+
 p bubble_sort!([5, 3])
 p bubble_sort!([6, 2, 7, 1, 4])
 array = %w(Sue Pete Alice Tyler Rachel Kim Bonnie)

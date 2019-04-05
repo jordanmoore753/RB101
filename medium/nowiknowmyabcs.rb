@@ -57,7 +57,7 @@ def block_word?(str)
   true
 end
 
-p block_word?('jest')
+p block_word?('BUTCH')
 
-
-
+BLOCKS = %w(BO XK DQ CP NA GT RE FS JW HU VI LY ZM).freeze
+p BLOCKS
