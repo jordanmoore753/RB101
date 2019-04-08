@@ -33,3 +33,8 @@ end
 
 p fibonacci(12)
 
+x = [1, 3, nil, 5, nil]
+
+x.delete(nil)
+
+p x
