@@ -1,0 +1,53 @@
+createdAt: "2019-04-09T17:16:39.443Z"
+updatedAt: "2019-04-09T17:37:02.940Z"
+type: "MARKDOWN_NOTE"
+folder: "3a6699afa20b7b226f08"
+title: "Method Invocation"
+tags: []
+content: '''
+  ### Method Invocation
+  Method invocation happens when we call a method. A method can either be self-defined within the program or it can be one of *Ruby's* many built-in methods, like `puts`, `each`, or `select`, to name a few.
+  
+  **Example**: On line 5, we invoke the method `puts` and pass in the argument `"Hello String"` to it. 
+  
+  `Line 5: puts 'Hello String'`
+  
+  ### Method Definition
+  Method definition happens when we define our own method within the code using the `def` keyword.
+  
+  **Example**: On line 1 we define the method `a_method` and pass in the parameter `str` with it.
+  
+  `Line 1: def a_method(str)`
+  
+  ### Mutating the Caller
+  
+  I always think of nuclear mutants when I hear this phrase. It's easy to understand this concept but harder to predict its implementation in the code. Mutating the caller means that you permanently alter the argument passed into the method. Often, you will see a `!` associated with mutating the caller; however, there are some methods, like `delete` that do not have the `bang`suffix and still mutate the caller.
+  
+  **Example**: 
+  
+  `def upcase_str(str)`
+  `str.upcase!`
+  `end`
+  
+  On line 21 we define the method `upcase_str` and pass in the parameter `str`. On line 22, we invoke the method `upcase!` on the parameter `str`, thereby mutating its caller (the local variable passed in as the argument).
+  
+  ### For Loop
+  
+  The `for` loop functions similarly to the `each` iterator. It allows you to iterate through a collection without specifying a `do..end` block.
+  
+  **Example**: 
+  
+  `for item in (1..5)`
+  `puts item + 1`
+  `end`
+  
+  On line 33, we invoke the method `for` on the argument `1..5` and pass in the parameter `item` to the block. On line 34 we invoke the method `puts` on the parameter `item` and print the parameter + `1`. This will output on separate  lines: 
+  
+  `=> 2, 3, 4, 5, 6`
+  
+  This type of loop does not mutate the caller unless the `block` calls for some kind of mutating method, like `<<` or `slice!`.
+  
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false

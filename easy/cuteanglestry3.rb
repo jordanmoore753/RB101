@@ -40,5 +40,9 @@ end
 
 p dms(76.73)
 
+x = ['1', '2', '3', '4', '5']
+for item in x  
+  puts item << 'b'
+end
 
-
+p x
