@@ -1,40 +1,40 @@
 =begin 
 
-input = integer
+1. Create an empty array named `substrings` that will contain the substrings.
+2. Create a local variable named `counter` that will be used to create a range of characters within the given `string`.
+3. Create a local variable named `vowel_count` that will be used for counting vowels in the elements of `substring`.
+4. For every `character` in the input `string`:
+* Check for `counter` being equal to the length of `string`. If true, append only `character` to `substrings` and exit the loop or iteration.
+* Otherwise, append the result of `character` up to and including `counter` to `substrings`.
+* Increment `1` to `counter`
+5. For each `element` in `substring`:
+* Count the amount of vowels `aeiou` and add the amount to `vowel_count`
+6. Return `vowel_count`.
 
-output = integer
+`Input: 'abce': 'a,' 'ab', 'abc', 'abce', 'b', 'bc', 'be', 'c', 'ce', 'e'`
+`Output: 8`
 
-rules = must be recursive
-        find number at index number (integer input)
-
-ex =
-
-fibonacci(1) == 1
-fibonacci(2) == 1
-fibonacci(3) == 2
-fibonacci(4) == 3
-fibonacci(5) == 5
-fibonacci(12) == 144
-fibonacci(20) == 6765
-
-if it's less than 2 then just return 1.
-since we're going backwards, we want to subtract
-in our method recursion calls.
-fib(n -1) + fib(n - 2)
 =end
 
-def fibonacci(n)
-  if n < 2
-    return n
-  else
-    fibonacci(n - 1) + fibonacci(n - 2)
+def vowel_recognition(str)
+  substrings = []
+  counter = 0
+
+  str.each_char do |_|
+    substrings << substrings(str[counter..-1])
+    counter += 1
   end
+
+  substrings.join('').scan(/[aeiouAEIOU]/).count
 end
 
-p fibonacci(12)
+def substrings(str)
+  counter = 0
+  substrings = []
 
-x = [1, 3, nil, 5, nil]
+  0.upto(str.length - 1) { |counter| substrings << str[0..counter] }
 
-x.delete(nil)
+  substrings
+end
 
-p x
+p vowel_recognition("aeiouAEIOU")
