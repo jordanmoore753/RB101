@@ -1,9 +1,11 @@
 createdAt: "2019-04-09T17:16:39.443Z"
-updatedAt: "2019-04-09T18:05:25.213Z"
+updatedAt: "2019-04-10T11:00:37.473Z"
 type: "MARKDOWN_NOTE"
 folder: "3a6699afa20b7b226f08"
 title: "Method Invocation"
-tags: []
+tags: [
+  "RB109_Assessment_Notes"
+]
 content: '''
   ### Method Invocation
   Method invocation happens when we call a method. A method can either be self-defined within the program or it can be one of *Ruby's* many built-in methods, like `puts`, `each`, or `select`, to name a few.
@@ -46,6 +48,10 @@ content: '''
   `=> 2, 3, 4, 5, 6`
   
   This type of loop does not mutate the caller unless the `block` calls for some kind of mutating method, like `<<` or `slice!`.
+  
+  ### Map
+  
+  The `map` method iterates over the argument passed into it. 
   
 '''
 linesHighlighted: []
