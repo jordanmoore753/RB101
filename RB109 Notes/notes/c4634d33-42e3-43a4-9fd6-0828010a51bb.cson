@@ -1,5 +1,5 @@
 createdAt: "2019-04-09T17:16:39.443Z"
-updatedAt: "2019-04-10T11:00:37.473Z"
+updatedAt: "2019-04-11T14:27:03.810Z"
 type: "MARKDOWN_NOTE"
 folder: "3a6699afa20b7b226f08"
 title: "Method Invocation"
@@ -49,9 +49,63 @@ content: '''
   
   This type of loop does not mutate the caller unless the `block` calls for some kind of mutating method, like `<<` or `slice!`.
   
-  ### Map
+  ### Transformation
+  Transformation is the act of modifying every element within the collection.
   
-  The `map` method iterates over the argument passed into it. 
+  An example would be: increment every element in the array by 1.
+  
+  Another example would be to append 's' to the end of every string element in an array.
+  
+  The four essentials of any loop are:
+  1. A loop
+  2. A counter
+  3. A way to exit the loop
+  4. A way to retrieve the current value
+  
+  Transformation and Selection both require criteria. The criteria for transformation determines *how* to perform the criteria; whereas, selection's criteria determines *which* elements get selected.
+  
+  You can transform a new or separate array while looping or iterating through a different one. I do this a lot, where I'll append elements from the array being iterated through onto an empty array initialized a few lines above.
+  
+  ### Selection
+  Selection is the act of picking certain elements out of a collection based on a set of criteria.
+  
+  An example would be: select only elements that are odd.
+  
+  Another example would be to sleect only the elements that are strings.
+  
+  The four essentials of any loop are:
+  1. A loop
+  2. A counter
+  3. A way to retrieve the current value
+  4. A way to exit the loop
+  
+  In this code: 
+  
+  `  
+  if current_char == 'g'
+  selected_chars << current_char   
+  end`
+  
+  The *selection criteria* is the `if conditional`. It determines what is and isn't selected.
+  
+  Important: Any time you use selection or transformation, you return in some way a new collection.
+  
+  ### Each
+  `each` is essentially the same thing as a `loop`. One difference is that it is a simpler way to iterate over a collection. The bigger difference is that `each` simply returns the collection it was called on without modification.
+  
+  ### Select
+  `select` selects elements and returns a new collection by evaluating the return value of the block. Any element that evaluates to true will be returned in the new collection. The last expression in the block is the return value to the `select` method.
+  
+  ### Map
+  `map` is similar to `select` in that it evaluates the return value of its block for returning an array. If there is a `conditional` as the last line in the block passed to a `map`invocation, the return value to the invocation will be a `boolean` and will be returned as an element in the new array. So, the difference between `select` and `map` is that `map` uses the return value of the block to perform transformation, not selection.
+  
+  ### Each With Object
+  `each_with_object` is similar to `each` but it passes an extra parameter `object` and also an argument `[] or {}` to the method. The argument collection is the return value of the method.
+  
+  To modify the object, all you need to do is specify some transformation criteria for the second parameter.
+  
+  ### Partition
+  `partition` is really cool. You can do parallel assignment to create two separate arrays based on some criteria. False goes in the second variable, true goes in the first variable.
   
 '''
 linesHighlighted: []

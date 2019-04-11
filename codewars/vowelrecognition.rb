@@ -38,3 +38,123 @@ def substrings(str)
 end
 
 p vowel_recognition("aeiouAEIOU")
+
+
+arrayy = [['1', '8', '11'], ['2', '6', '13'], ['2', '12', '15'], ['1', '8', '9']]
+
+def sorter(arr)
+  arr.sort_by do |sub_arr|
+    sub_arr.map do |num|
+      num.to_i
+    end
+  end
+end
+
+p sorter(arrayy)
+
+x = 'americathebeaut'
+
+produce = {
+  'apple' => 'Fruit',
+  'carrot' => 'Vegetable',
+  'pear' => 'Fruit',
+  'broccoli' => 'Vegetable'
+}
+
+my_numbers = [1, 4, 3, 7, 2, 6]
+
+def double_numbers(arr)
+  arr.map.with_index do |number, idx| 
+    number *= 2 unless idx.even? 
+
+    number
+  end
+end
+
+p double_numbers(my_numbers)
+p my_numbers
+
+if puts 'poop'
+  puts 'yeah truthy'
+else
+  puts 'no falsey'
+end
+
+hsh = { a: "ant", b: "bear", c: "cat" }
+
+def poo(hsh)
+hsh.each_with_object({}) do |(key, value), array|
+  array[key] = value
+end
+end
+
+p poo(hsh)
+
+p [[:a, "ant"], [:b, "bear"]].to_h
+
+odd, even = [1,2,3,4,5].partition do |x|
+            x.odd?
+end
+p odd, even
+
+if true
+  puts "true is truthy, duh!"
+else
+  puts "true is falsey, wtf!"
+end
+
+if nil
+  puts "nil is truthy"
+else
+  puts "nil is falsey"
+end
+
+if 0
+  puts "0 is truthy"
+else
+  puts "0 is falsey"
+end
+
+xx = ['ant', 'bear', 'cat']
+
+
+def pooooos(str)
+  str.each_with_object({}) do |value, hash|
+  hash[value[0]] = value
+end
+end
+
+p pooooos(xx)
+
+def greetings(str)
+  puts "Goodbye"
+end
+
+word = "Hello"
+
+p greetings(word)
+
+arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+p arr[2, 3]
+p arr[2, 3][0]
+
+[1, 2, 3].map do |num|
+  num.odd?
+  puts num
+end
+
+def mess_with_vars(one, two, three)
+  one.gsub!("one","two")
+  two.gsub!("two","three")
+  three.gsub!("three","one")
+end
+
+one = "one"
+two = "two"
+three = "three"
+
+mess_with_vars(one, two, three)
+
+puts "one is: #{one}"
+puts "two is: #{two}"
+puts "three is: #{three}"

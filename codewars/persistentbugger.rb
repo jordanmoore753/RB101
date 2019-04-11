@@ -38,9 +38,11 @@ def persistence(int)
   return counter
 end
 
-p persistence(39)
-
-
+p persistence(39) == 3
+p persistence(77) == 4
+p persistence(1) == 0
+p persistence(432) == 2
+p persistence(92_929) == 3
 
 
 
