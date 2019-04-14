@@ -39,11 +39,27 @@ def iq_test(str)
   numbers.map { |element| evens += 1 if element.even? }
 
   if evens == 1
-    numbers.map.with_index { |ele, idx| return idx + 1 if ele.even? }
+    numbers.each_with_index { |ele, idx| return idx + 1 if ele.even? }
   else
-    numbers.map.with_index { |ele, idx| return idx + 1 if ele.odd? }
+    numbers.each_with_index { |ele, idx| return idx + 1 if ele.odd? }
   end
 
 end
 
-p iq_test('2 4 7 8 10')
+p iq_test('1 2 1 1')
+
+counter = 0
+
+loop do
+  counter += 1
+  next if counter.odd?
+  puts counter
+  break if counter > 5
+end
+
+x = [2, 5, 3, 4, 1]
+x.sort! do |a, b|
+  b <=> a
+end
+
+p x

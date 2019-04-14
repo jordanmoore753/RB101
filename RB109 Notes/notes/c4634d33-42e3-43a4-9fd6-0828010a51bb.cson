@@ -1,5 +1,5 @@
 createdAt: "2019-04-09T17:16:39.443Z"
-updatedAt: "2019-04-11T14:27:03.810Z"
+updatedAt: "2019-04-12T21:51:37.971Z"
 type: "MARKDOWN_NOTE"
 folder: "3a6699afa20b7b226f08"
 title: "Method Invocation"
@@ -106,6 +106,29 @@ content: '''
   
   ### Partition
   `partition` is really cool. You can do parallel assignment to create two separate arrays based on some criteria. False goes in the second variable, true goes in the first variable.
+  
+  ### Pass by Value
+  Pass by value means simply copying the original object. This means that the original object cannot be mutated. An example of this would be numbers, since numbers are immutable in Ruby.
+  
+  ### Pass by Reference
+  Pass by reference means that a reference to an object is passed into the method. Strings, arrays, and hashes work under this means, mostly. When it is pass by reference, the object can be mutated but it doesn't necessarily have to be mutated.
+  
+  ### Ruby is Pass by....
+  Ruby is pass by reference value.
+  
+  By this, I mean that in some situations, depending on the mutability of the object being passed, ruby passes by value or by reference. 
+  
+  In the case of a number and boolean, ruby is always pass by value. Numbers are immutable. In the case of strings, arrays, and hashes, ruby is pass by reference with the option of mutability depending on which type of method (destructive or non-destructive) is invoked on the object.
+  
+  ### Receiver?
+  The receiver of a method call is the object that the method is invoked on.
+  
+  Here's an example:
+  
+  `[1, 2, 3].each`
+  
+  `[1, 2, 3]` is the receiver.
+  
   
 '''
 linesHighlighted: []

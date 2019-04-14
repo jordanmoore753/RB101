@@ -42,42 +42,53 @@ algorithm =
 
 =end
 
-def fold_array(array, runs)
-  results = array
-  left_counter, right_counter = 0, -1
+# def fold_array(array, runs)
+#   results = []
+#   array.map { |ele| results << ele }
+#   left_counter, right_counter = 0, -1
 
-  runs.times do
-    midpoint = results.size / 2 
-    left_counter, right_counter = 0, -1
+#   runs.times do
+#     midpoint = results.size / 2 
+#     left_counter, right_counter = 0, -1
     
-    if results.size == 1
-      break
-    elsif results.size == 2
-      results = results.reduce(:+)
-      break
-    elsif results.size.even?
-      until left_counter >= midpoint
-        results[left_counter] += results[right_counter]
-        results.slice!(-1)
-        left_counter += 1
-      end
-    else
-      until left_counter == midpoint
-        results[left_counter] += results[right_counter]
-        results.slice!(-1)
-        left_counter += 1
-      end
+#     if results.size == 1
+#       break
+#     elsif results.size == 2
+#       results = results.reduce(:+)
+#       break
+#     elsif results.size.even?
+#       until left_counter >= midpoint
+#         results[left_counter] += results[right_counter]
+#         results.slice!(-1)
+#         left_counter += 1
+#       end
+#     else
+#       until left_counter == midpoint
+#         results[left_counter] += results[right_counter]
+#         results.slice!(-1)
+#         left_counter += 1
+#       end
+#     end
+
+#     left_counter, right_counter = 0, -1
+#   end
+
+#   if results.is_a? Integer
+#     [results]
+#   else
+#     results
+#   end
+# end   
+
+def fold_array(array, runs)
+  newArray = array[0..array.length]
+  runs.times do 
+    for i in 0...newArray.length/2
+      newArray[i] = newArray[i] + newArray.pop
     end
-
-    left_counter, right_counter = 0, -1
   end
-
-  if results.is_a? Integer
-    [results]
-  else
-    results
-  end
-end   
+  newArray
+end
 
 input = [1, 2, 3, 4, 5]
 p fold_array(input, 2) == [9, 6]
