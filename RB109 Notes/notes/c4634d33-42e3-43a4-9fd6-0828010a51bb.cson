@@ -1,5 +1,5 @@
 createdAt: "2019-04-09T17:16:39.443Z"
-updatedAt: "2019-04-12T21:51:37.971Z"
+updatedAt: "2019-04-16T15:23:06.348Z"
 type: "MARKDOWN_NOTE"
 folder: "3a6699afa20b7b226f08"
 title: "Method Invocation"
@@ -128,6 +128,30 @@ content: '''
   `[1, 2, 3].each`
   
   `[1, 2, 3]` is the receiver.
+  
+  ### Sort
+  The `sort` method works by using the comparison `<=>` operator to compare two parameters `a and b`. Based on the calculation, one element will be placed first, and the other one second.
+  
+  When the comparison between `a <=> b` results in value of `1`, `b` will follow `a` in the return array. When there is a `-1`, `b` will preceed `a`. A `0` indicates that both values are equal.
+  
+  By default, the invocation of the `sort` method results in the receiver being ordered in ascending value. If one wants to use descending order, a block may be passed alongside the method invocation, wherein the line `b <=> a` can be used to force the values into descending order.
+  
+  Using the optional code block, one can also sort by using other methods. For instance, one could sort by passing the method invocation `length` to the method invocation `sort_by`. 
+  
+  `strings.sort_by(&:length)`
+  
+  ### Range
+  This is something I NEED TO REMEMBER. Ingrain this in your BRAIN, JORDAN.
+  
+  A range represents a set of value, defined by a beginning value and ending value. This is also known as an **interval**.
+  
+  Here's an example:
+  
+  `(1..4).to_a` => `[1, 2, 3, 4]`
+  `(1...4).to_a => [1, 2, 3]`
+  `('a'..'d').to_a => [a, b, c, d]`
+  
+  This is INFINITELY faster than that crap method you've been using with the `each` method. Enter into PRO territory and use the `range` method invocation to create the arrays you need. This WILL be useful on the exam. GUARANTEED.
   
   
 '''
