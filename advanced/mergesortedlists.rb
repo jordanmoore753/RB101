@@ -28,31 +28,24 @@ algorithm =
 =end
 
 def merge(arr_one, arr_two)
-  
   return arr_one if arr_two.empty?
   return arr_two if arr_two.empty?
 
-  arr1, arr2 = arr_one.dup, arr_two.dup
+  arr1 = arr_one.dup
+  arr2 = arr_two.dup
   results = []
   combined_length = (arr1 + arr2).length
 
-  combined_length.times do 
-
+  combined_length.times do
     arr1_min, arr2_min = arr1.min, arr2.min
    
-    if arr1.empty? 
+    if arr1.empty? || not_nil?(arr2_min) && first_is_smaller?(arr2_min, arr1_min)
       results << arr2_min 
       delete_from_arr(arr2_min, arr2)
-    elsif arr2.empty?
+    elsif arr2.empty? || not_nil?(arr1_min) && first_is_smaller?(arr1_min, arr2_min)
       results << arr1_min 
       delete_from_arr(arr1_min, arr1)
-    elsif arr1_min < arr2_min
-      results << arr1_min 
-      delete_from_arr(arr1_min, arr1)
-    elsif arr2_min < arr1_min
-      results << arr2_min 
-      delete_from_arr(arr2_min, arr2)
-    elsif arr1_min == arr2_min
+    else 
       results += [arr1_min, arr2_min]
       delete_from_arr(arr1_min, arr1)
       delete_from_arr(arr2_min, arr2)  
@@ -64,6 +57,14 @@ end
 
 def delete_from_arr(value, arr)
   arr.delete_at(arr.index(value))
+end
+
+def first_is_smaller?(one, two)
+  one < two
+end
+
+def not_nil?(value)
+  value != nil
 end
 
 p merge([1, 5, 9], [2, 6, 8]) == [1, 2, 5, 6, 8, 9]
