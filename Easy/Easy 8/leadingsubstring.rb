@@ -23,4 +23,4 @@ def substrings(str)
   p result
 end
 
-p substrings_at_start('xyzzy')
+p substrings('xyzzy')

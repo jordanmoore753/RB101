@@ -1,111 +1,71 @@
-=begin
+=begin 
 
-input = two arguments: a string, and an integer argument passed into the method
+input = string, integer
 
-output = a new string with the characters mixed in a
-new way
+output = string
 
-rules = take every 2nd char from the string, then the other chars
-that are NOT every 2nd char, and CONCAT them as new string. Do
-this N times.
+rules = take every 2nd char from the string (odds)
+        then every even char from the string
+        concat together as new string
+        do this n times (integer input)
 
-Write two methods
+        second method
+        decrypt the text, given the encrypted
+        string and an integer
+        do the operation n times (integer input)
 
-If input is null or empty return exactly nil!
+algorithm =
+- encrypt method
+- initialize encrypt_str as ''
+- n times do the following
+  - encrypt_str += invoking select on str split for odd chars
+  - encrypt_str += invoking select str split for even chars and zero
+-
 
-This means that take every odd index character and concat
-with every even index character
-
-ex =
-
-"This is a test!", 1 -> "hsi  etTi sats!"
-"This is a test!", 2 -> "hsi  etTi sats!" -> "s eT ashi tist!"
-
-I believe the encrypt method and decrypt method
-will be mirror images of one another.
 
 =end
 
-def encrypt(text, n)
-  if text.empty?
-    return text
+def encrypt(str, int)
+  encrypt_str = str
+  current_str = str
+
+  int.times do
+    current_str = ''
+    current_str += encrypt_str.split('').select.with_index { |char, idx| idx.odd? }.join('')
+    current_str += encrypt_str.split('').select.with_index { |char, idx| idx.even? || idx.zero? }.join('')
+    encrypt_str = current_str
   end
 
-  if n > 0
-    n.times do
-      odds, evens = '', ''
-      text.split('').each_with_index do |char, idx|
-        if idx.odd?
-          odds << char
-        else
-          evens << char
-        end
-      end
-      text = odds << evens
-    end    
-  end
-  text
+  current_str
 end
 
-def decrypt(encrypted_text, n)
-  if encrypted_text.empty?
-    return encrypted_text
-  end
+def decrypt(str, int)
+  return str if int <= 0
+  encrypt_str = str
+  current_str = str
 
-  output = []
+  int.times do
+    current_str, counter = '', 0
+    midpoint = encrypt_str.length / 2
+    current_str += encrypt_str[midpoint]
+    
+    left, right = encrypt_str.split('').slice(midpoint..-1), encrypt_str.split('').slice(0...midpoint)
+
+    current_str = left.zip(right).flatten.join('')
+    encrypt_str = current_str
+  end
   
-  if encrypted_text.length.even?
-    odds = encrypted_text.slice(0..encrypted_text.length / 2 + 1).split('')
-    evens = encrypted_text.slice((encrypted_text.length / 2 + 2)..-1).split('')
-  else
-    odds = encrypted_text.slice(0..encrypted_text.length / 2).split('')
-    evens = encrypted_text.slice(encrypted_text.length / 2 + 1..-1).split('')
-  end
-  counter = 0
-
-  while counter < encrypted_text.length
-    if counter.even? || counter.zero?
-      output << odds[counter]
-      odds.delete_at(counter)
-      counter += 1
-    else
-      output << evens[counter]
-      evens.delete_at(counter)
-      counter += 1
-    end
-  end
-
-  p output
-
+  current_str
 end
-=begin
-def decrypt(encrypted_text, n)
-  if encrypted_text.empty?
-    return encrypted_text
-  end
 
-  if encrypted_text.split(' ').size <= 4
-    rotations = 4 - n
-  else
-    rotations = n - 2
-  end
+# p decrypt("This is a test!", 0)
+p decrypt("hsi  etTi sats!", 1)
+p decrypt("s eT ashi tist!", 2)
+p decrypt(" Tah itse sits!", 3)
+p decrypt("This is a test!", 4)
+p decrypt("This is a test!", -1)
+p decrypt("hskt svr neetn!Ti aai eyitrsig", 1)
 
-  if n > 0
-    (rotations).times do
-      odds, evens = '', ''
-      encrypted_text.split('').each_with_index do |char, idx|
-        if idx.odd?
-          odds << char
-        else
-          evens << char
-        end
-      end
-      encrypted_text = odds << evens
-    end    
-  end
-  encrypted_text
-end
-=end
-p decrypt('foure', 1)
-p decrypt('This has five words in', 1)
-p decrypt('febyeW1cfJoDT qPNlPT iiCOUh ZdZbIZRD Ej0JdU,Vi vI,U FWYl5TWMx2;qOYwYkK2H JJE7DtOGVd8', 9) # == 'Uf,eVbiy evWI1,cUf JFoWDYTl 5qTPWNMlxP2T; qiOiYCwOYUkhK 2ZHd ZJbJIEZ7RDDt OEGjV0dJ8d'
+# p encrypt("This is a test!", 0)
+# p encrypt("This is a test!", 1)
+# p encrypt("This is a test!", 2)
