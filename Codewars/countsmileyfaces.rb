@@ -38,4 +38,7 @@ def smile_test?(str)
   true
 end
 
-p count_smileys([":D",":~)",";~D",":)"])
+p count_smileys([":D",":~)",";~D",":)"]) == 4
+p count_smileys([";", ")", ";*", ":$", "8-D"]) == 0
+p count_smileys([":)",":(",":D",":O",":;"]) == 2
+p count_smileys([";]", ":[", ";*", ":$", ";-D"]) == 1

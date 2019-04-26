@@ -47,3 +47,6 @@ end
 
 # p get_substrings('armstrong')
 p compare_arrays(["arp", "live", "strong"], ["lively", "alive", "harp", "sharp", "armstrong"])
+p compare_arrays(["tarp", "mice", "bull"], ["lively", "alive", "harp", "sharp", "armstrong"])
+
+p sub_words(["arp", "live", "strong"], ["lively", "alive", "harp", "sharp", "armstrong"])
