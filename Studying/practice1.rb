@@ -67,8 +67,9 @@ def reverse_array(array)
   results
 end
 
+
 def middle_idx_arr(arr, int)
-  return 'Integer too large.' if int > arr.size
+  return arr if int > arr.size
   results = []
   arr.size.odd? ? mid = arr.size / 2 : mid = (arr.size / 2) - 1
   
@@ -76,11 +77,24 @@ def middle_idx_arr(arr, int)
   results << reverse_array(arr[int..(arr.size - 1)])
 
   results.flatten!
-  results[mid]
 end
 
-p middle_idx_arr([0, 1, 2, 3, 4, 5, 6], 2) == 5
-p middle_idx_arr([0, 19, 4, 299], 2) == 19
-p middle_idx_arr([5, 3, 15, 22, 854, 1234, 432, 123], 4) == 22
-p middle_idx_arr([1, 4, 234, 'thei', '333', 'dfe', 23], 1) == '333'
-p middle_idx_arr(['thoros', 'of', 'myr', 44, 54, 5432, 1223, 76543, 'eggs'], 10) == 'Integer too large.'
+
+def random_arr
+  arr = []
+  rand(5..54).times { arr << rand(10034) }
+  arr
+end
+
+def random_int
+  int = rand(5..55)
+end
+
+
+p random_int
+# p rand(25..100)
+p middle_idx_arr([0, 1, 2, 3, 4, 5, 6], 2) 
+p middle_idx_arr([0, 19, 4, 299], 2) 
+p middle_idx_arr([5, 3, 15, 22, 854, 1234, 432, 123], 4)
+p middle_idx_arr([], 1) == []
+p middle_idx_arr(['thoros', 'of', 'myr', 44, 54, 5432, 1223, 76543, 'eggs'], 10)
