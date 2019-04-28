@@ -47,20 +47,15 @@ end
 
 =end
 
-def step(g, m, n)
-  counter, element = 0, 1
-  primes = (m..n).select { |num| prime?(num) }
 
+def step(g, m, n) 
 
-    until m + g > n
-      return [m, (m + g)] if prime?(m + g)
-      m += 1
-    end
+  until m + g > n
+    return [m, (m + g)] if prime?(m + g) && prime?(m)
+    m += 1
+  end
 
-
-
-  return []
-
+  return nil
 end
 
 def prime?(int)
