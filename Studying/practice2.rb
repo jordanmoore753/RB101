@@ -3,7 +3,10 @@
 Directions
 
 Determine how many words in a given array are palindromes. 
-Do not use the #reverse method. Case of the character DOES matter.
+
+DO NOT USE THE #REVERSE method.
+
+Case of the character DOES matter.
 Return the number of elements that are palindromes.
 
 'Abcba' => false
