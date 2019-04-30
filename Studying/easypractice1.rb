@@ -71,3 +71,7 @@ vowels = ['a', 'e', 'i', 'o', 'u']
 x -= vowels
 p x
 p 'a'.include?('a')
+
+c = 'last word'
+s = c.split
+p s[-2]

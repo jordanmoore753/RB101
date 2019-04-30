@@ -34,3 +34,12 @@ def word_to_digit(str)
 end
 
 p word_to_digit('Please call me at five five five one two three four. Thanks.')
+
+x = 'patrick3'
+x = x.split('')
+x.delete_at(-1)
+p x.join
+
+c = [1,2,3]
+c.delete_at(1)
+p c
