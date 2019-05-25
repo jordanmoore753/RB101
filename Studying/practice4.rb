@@ -28,8 +28,8 @@ def fibonacci_select(arr)
     fibs << fibs[counter] + fibs[counter + 1]
     counter += 1
   end
-  
+
   arr.select.with_index { |ele, idx| fibs.include?(idx) }
 end
 
-p fibonacci_select([1, 3, 'jone', 4, 5, 6, 7, 8])
+p fibonacci_select([1, 3, 3, 4, 5, 6, 7, 8, 5, 3, 'jake'])
