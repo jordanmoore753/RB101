@@ -38,4 +38,4 @@ def time_of_day(original_minutes)
   "#{format('%02d', hours)}:#{format('%02d', remaining_minutes)}"
 end
 
-p time_of_day(800)
+p time_of_day(1600)
